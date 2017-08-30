@@ -1,0 +1,54 @@
+# Mycroft Cheatsheet
+
+## Description
+This is right now is just a dump from a org-mode file of useful things for Mycroft devs and Mark 1 users. Will eventually be formatted for easier maintenance and contribs.
+
+
+* Mycroft
+** Dev
+*** NB: Shell hacks can be added to ~/.bashrc using nano for persistence
+**** $ nano ~/.bashrc
+**** copy-paste hack at end of file
+**** ctrl+x, y, enter to save and exit
+*** run cli
+**** $ python /usr/local/lib/python2.7/site-packages/mycroft(hit tab)/mycroft/client/text/main.py --quiet
+*** run cli hack
+**** $ cli() { _egg=`ls /usr/local/lib/python2.7/site-packages |grep mycroft` ; python /usr/local/lib/python2.7/site-packages/$_egg/mycroft/client/text/main.py --quiet ; }
+**** $ cli
+*** force reload skill
+**** delete the .pyc files
+*** reload skill hack
+**** $ reload() { sudo rm /opt/mycroft/skills/$1/*.pyc ; echo $1' reloading...' ; }
+**** $ reload skill-name
+*** logging
+**** write log messages from skills with self.log.[error|debug|info]
+**** logs are written to /var/log/mycroft-skills.log
+**** $ cat /var/log/mycroft-skills.log |grep "search text" -A5 |less
+*** skills log hack
+**** $ skills-log() { cat /var/log/mycroft-skills.log |grep $1 -B $2 -A $3 |less ; }
+**** $ skills-log "search text" lines-before lines-after
+*** echo to bashrc
+**** $ barc-add() { echo $1 >> ~/.bashrc ; }
+**** NB: escape $ and ` characters with \ when using
+*** fix local import error
+**** sys.path.append(abspath(dirname(__file__))) before local imports
+**** use try/except to perform optional reload
+*** call another skill
+**** emit a bus message of type "skill_id:intent_name"
+*** speak payload
+**** {"type": "speak", "data": {"expect_response": false, "utterance": "It's 02:01, PM"}, "context": null}
+*** listen payload
+**** {"type": "recognizer_loop:utterance", "data": {"lang": "en-us", "utterances": ["what's the weather in chicago"]}, "context": null}
+*** view core version
+**** python -c "import mycroft.version;print mycroft.version.CORE_VERSION_STR"
+*** core verion hack
+**** core-version() { python -c "import mycroft.version;print mycroft.version.CORE_VERSION_STR" ; }
+*** 
+** Mark 1
+*** Get IP
+**** hey mycroft, what is your IP address
+*** SSH
+**** menu -> SSH -> allow
+**** $ ssh pi@ip
+**** password: mycroft
+** 
